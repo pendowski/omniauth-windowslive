@@ -20,6 +20,8 @@ module OmniAuth
         response_type: 'code'
       }
 
+      option :authorize_options, %i[ login_hint ]
+
       option :name, 'windowslive'
 
       uid { raw_info['id'] }

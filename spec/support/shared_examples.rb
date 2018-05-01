@@ -1,6 +1,7 @@
 # NOTE it would be useful if this lived in omniauth-oauth2 eventually
 
 shared_examples 'an oauth2 strategy' do
+  
   describe '#client' do
     it 'should be initialized with symbolized client_options' do
       @options = { client_options: { 'authorize_url' => 'https://example.com' } }
@@ -16,7 +17,7 @@ shared_examples 'an oauth2 strategy' do
     end
 
     it 'should include top-level options that are marked as :authorize_options' do
-      @options = { authorize_options: [:scope, :foo], scope: 'bar', foo: 'baz' }
+      @options = { authorize_options: %i[ scope foo ], scope: 'bar', foo: 'baz' }
       expect(subject.authorize_params['scope']).to eq('bar')
       expect(subject.authorize_params['foo']).to eq('baz')
     end

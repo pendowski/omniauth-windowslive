@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 describe OmniAuth::Strategies::Windowslive do
+  let(:request) { double('Request', scheme: 'http', url: '', params: {}, cookies: {}, env: {}) }
+  
   subject do
     OmniAuth::Strategies::Windowslive.new(nil, @options || {}).tap do |strategy|
+      allow(strategy).to receive(:request) do
+        request
+      end
       strategy.instance_variable_set(:@env, {})
     end
   end

@@ -15,12 +15,26 @@ module OmniAuth
         authorize_url: '/oauth20_authorize.srf',
         token_url:     '/oauth20_token.srf'
       }
+      
+      option :authorize_options, %i[ client_id login_hint scope state redirect_uri response_type ]
 
       option :authorize_params, {
         response_type: 'code'
       }
 
-      option :authorize_options, %i[ login_hint ]
+      def authorize_params
+        super.tap do |params|
+          options[:authorize_options].each do |k|
+            params[k] = request.params[k.to_s] unless [nil, ''].include?(request.params[k.to_s])
+          end
+
+          options[:authorize_params].each do |k|
+            params[k] = options[:authorize_params][k.to_s]
+          end
+
+          session['omniauth.state'] = params[:state] if params[:state]
+        end
+      end
 
       option :name, 'windowslive'
 
